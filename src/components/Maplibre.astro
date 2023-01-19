@@ -1,0 +1,58 @@
+<script>
+import {Map, NavigationControl} from 'maplibre-gl';
+import 'maplibre-gl/dist/maplibre-gl.css'
+
+const map = new Map({
+  container: "map",
+  center: [140, 40],
+  zoom: 6,
+  style: {
+        version: 8,
+        sources: {
+            himawari: {
+                type: 'vector',
+                tiles: [
+                    'https://cyberjapandata.gsi.go.jp/xyz/experimental_bvmap/{z}/{x}/{y}.pbf',
+                ],
+                maxzoom: 14,
+                attribution: '地理院ベクトルタイル'
+            },
+            gsiseamless: {
+              type:'raster',
+              tiles: ['https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg'],
+              attribution: '地理院タイル'
+            }
+        },
+        layers: [
+            {
+              id:'gsiseamless',
+              type:'raster',
+              source:'gsiseamless'
+            },
+            {
+                id: 'himawari',
+                type: 'line',
+                source: 'himawari',
+                'source-layer': 'road',
+                paint: {
+                    'line-gap-width': 5,
+                    'line-color': 'red'
+                },
+            },
+        ],
+    },
+})
+map.addControl(new NavigationControl({}));
+console.log(map)
+</script>
+
+<dvi>
+  Astro + MapLibre GL JS
+  <div id="map"></div>
+</dvi>
+
+<style>
+  #map {
+    height: 320px;
+  }
+</style>
